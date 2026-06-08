@@ -1,8 +1,10 @@
 import logging
 from contextlib import asynccontextmanager
+from pathlib import Path
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, FileResponse
+from fastapi.staticfiles import StaticFiles
 from datetime import datetime
 
 from app.config import settings
@@ -13,6 +15,9 @@ from app.routers import leaderboard
 # Setup logging
 setup_logging()
 logger = logging.getLogger(__name__)
+
+# Define paths
+frontend_path = Path(__file__).parent.parent / "frontend"
 
 # Lifespan context
 @asynccontextmanager
@@ -63,10 +68,10 @@ app = FastAPI(
 # CORS Middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.CORS_ORIGINS,
+    allow_origins=["*"],  # Allow all origins for development
     allow_credentials=False,
-    allow_methods=["GET", "OPTIONS"],  # Read-only methods
-    allow_headers=["Content-Type", "Accept"],
+    allow_methods=["GET", "OPTIONS", "POST"],
+    allow_headers=["*"],
     expose_headers=["Content-Type"],
     max_age=3600,
 )
@@ -87,22 +92,6 @@ async def global_exception_handler(request: Request, exc: Exception):
 
 # Include routers
 app.include_router(leaderboard.router)
-
-# Root endpoint
-@app.get("/")
-async def root():
-    """Root endpoint - API information"""
-    return {
-        "name": "ADYAANANT GURUKUL Live Leaderboard API",
-        "version": settings.API_VERSION,
-        "status": "running",
-        "docs": "/api/docs",
-        "endpoints": {
-            "leaderboard": "/api/leaderboard",
-            "member": "/api/member/{user_id}",
-            "health": "/api/health"
-        }
-    }
 
 # API root
 @app.get("/api")
@@ -130,6 +119,34 @@ async def api_root():
             }
         ]
     }
+
+# Serve frontend static files
+@app.get("/")
+async def serve_index():
+    """Serve index.html for root"""
+    return FileResponse(path=str(frontend_path / "index.html"))
+
+@app.get("/{file_path:path}")
+async def serve_static(file_path: str):
+    """Serve static files and SPA routing"""
+    # Don't interfere with API routes
+    if file_path.startswith("api/"):
+        return JSONResponse({"error": "Not found"}, status_code=404)
+    
+    # Try to serve the requested file
+    requested_path = frontend_path / file_path
+    if requested_path.exists() and requested_path.is_file():
+        return FileResponse(path=str(requested_path))
+    
+    # Try .html extension for SPA routing
+    if not any(file_path.endswith(ext) for ext in ['.css', '.js', '.json', '.png', '.jpg', '.gif', '.ico', '.svg']):
+        html_file = frontend_path / f"{file_path}.html"
+        if html_file.exists():
+            return FileResponse(path=str(html_file))
+        # Default to index.html for SPA
+        return FileResponse(path=str(frontend_path / "index.html"))
+    
+    return JSONResponse({"error": "Not found"}, status_code=404)
 
 if __name__ == "__main__":
     import uvicorn

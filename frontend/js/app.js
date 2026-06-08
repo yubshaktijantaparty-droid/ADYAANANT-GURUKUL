@@ -18,7 +18,8 @@ class LeaderboardManager {
         const isDev = hostname === 'localhost' || hostname === '127.0.0.1';
         
         if (isDev) {
-            return 'http://localhost:8000/api';
+            // Use relative API path - works from any local port
+            return '/api';
         }
         
         // Production endpoint (Railway)
