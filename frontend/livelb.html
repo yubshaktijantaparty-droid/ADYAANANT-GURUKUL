@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏆 Live Leaderboard - ADYAANANT GURUKUL</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="leaderboard-page">
+    <header class="header">
+        <div class="header-content">
+            <h1>🏆 LIVE LEADERBOARD</h1>
+            <div class="header-info">
+                <span class="active-members">
+                    👥 Active Members: <span id="active-count">0</span>
+                </span>
+                <span class="last-updated">
+                    ⏱️ Updated: <span id="last-updated">--:--:--</span>
+                </span>
+                <span class="refresh-indicator" id="refresh-indicator">🔄 Live</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Podium Section -->
+        <section class="podium-section" id="podium-section" style="display: none;">
+            <div class="podium-title">🎖️ TOP 3</div>
+            <div class="podium">
+                <div class="podium-card second-place" id="podium-2">
+                    <div class="medal">🥈</div>
+                    <div class="podium-rank">2nd</div>
+                    <div class="podium-name">--</div>
+                    <div class="podium-points">0 pts</div>
+                </div>
+                <div class="podium-card first-place" id="podium-1">
+                    <div class="medal">🥇</div>
+                    <div class="podium-rank">1st</div>
+                    <div class="podium-name">--</div>
+                    <div class="podium-points">0 pts</div>
+                </div>
+                <div class="podium-card third-place" id="podium-3">
+                    <div class="medal">🥉</div>
+                    <div class="podium-rank">3rd</div>
+                    <div class="podium-name">--</div>
+                    <div class="podium-points">0 pts</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Leaderboard Table Section -->
+        <section class="leaderboard-section">
+            <div class="table-wrapper">
+                <table class="leaderboard-table" id="leaderboard-table">
+                    <thead>
+                        <tr>
+                            <th class="rank-col">Rank</th>
+                            <th class="name-col">Member</th>
+                            <th class="cam-on-col">Cam ON</th>
+                            <th class="cam-off-col">Cam OFF</th>
+                            <th class="msg-col">Messages</th>
+                            <th class="points-col">Points</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboard-tbody">
+                        <tr class="loading-row">
+                            <td colspan="6">
+                                <div class="spinner"></div>
+                                <span>Loading leaderboard...</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="no-data" id="no-data" style="display: none;">
+                <p>📊 No leaderboard data available yet</p>
+            </div>
+        </section>
+
+        <!-- Connection Status -->
+        <div class="connection-status" id="connection-status">
+            <span class="status-indicator" id="status-indicator"></span>
+            <span id="status-text">Connecting...</span>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>🔱 ADYAANANT GURUKUL 🔱 | Live Leaderboard System</p>
+        <p class="footer-subtitle">Read-Only Display Layer | Real-Time Rankings</p>
+    </footer>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
