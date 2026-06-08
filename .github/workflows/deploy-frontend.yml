@@ -1,0 +1,34 @@
+name: Deploy Frontend to GitHub Pages
+
+on:
+  push:
+    branches: [ main, master ]
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/deploy-frontend.yml'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      
+      - name: Copy frontend files to docs
+        run: |
+          mkdir -p docs/css docs/js
+          cp frontend/index.html docs/
+          cp frontend/livelb.html docs/
+          cp frontend/other.html docs/
+          cp -r frontend/css/* docs/css/
+          cp -r frontend/js/* docs/js/
+          cp -r frontend/assets docs/ 2>/dev/null || true
+      
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add docs/
+          git diff --quiet && git diff --staged --quiet || (git commit -m "chore: deploy frontend to GitHub Pages" && git push)
