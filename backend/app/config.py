@@ -19,6 +19,10 @@ class Settings:
     MONGO_ACTIVE_MEMBERS_COLLECTION: str = "active_members"
     MONGO_USER_DATA_COLLECTION: str = "user_data"
     
+    # Runtime Configuration
+    HOST: str = os.getenv("HOST", "0.0.0.0")
+    PORT: int = int(os.getenv("PORT", "8000"))
+
     # CORS Configuration
     CORS_ORIGINS: list = [
         "http://localhost:3000",

@@ -15,13 +15,20 @@ class LeaderboardManager {
 
     getApiEndpoint() {
         const hostname = window.location.hostname;
+        const port = window.location.port;
         const isDev = hostname === 'localhost' || hostname === '127.0.0.1';
-        
+
         if (isDev) {
-            // Use relative API path - works from any local port
+            // When the frontend is served separately on port 8001,
+            // use the backend API on port 8000.
+            if (port === '8001') {
+                return 'http://127.0.0.1:8000/api';
+            }
+
+            // When the backend serves the frontend directly, use relative API path.
             return '/api';
         }
-        
+
         // Production endpoint (Railway)
         return 'https://your-railway-app.up.railway.app/api';
     }
@@ -156,21 +163,6 @@ class LeaderboardManager {
                     `${member.total_points} pts`;
             }
         });
-    }
-
-    displayTable(leaderboard) {
-        const tbody = document.getElementById('leaderboard-tbody');
-        
-        tbody.innerHTML = leaderboard.map((member, index) => `
-            <tr class="leaderboard-row" data-rank="${index + 1}">
-                <td class="rank-col">#${index + 1}</td>
-                <td class="name-col">${this.escapeHtml(member.name)}</td>
-                <td class="cam-on-col">${member.cam_on_minutes}</td>
-                <td class="cam-off-col">${member.cam_off_minutes}</td>
-                <td class="msg-col">${member.message_count}</td>
-                <td class="points-col">${member.total_points}</td>
-            </tr>
-        `).join('');
     }
 
     displayTable(leaderboard) {

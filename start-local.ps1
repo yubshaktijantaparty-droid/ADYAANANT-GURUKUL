@@ -1,6 +1,6 @@
 # Start ADYAANANT GURUKUL locally on Windows
 
-Write-Host "🔱 Starting ADYAANANT GURUKUL Local Development Server..." -ForegroundColor Cyan
+Write-Host "Starting ADYAANANT GURUKUL Local Development Server..." -ForegroundColor Cyan
 Write-Host ""
 
 # Function to stop processes on port
@@ -30,18 +30,20 @@ Pop-Location
 Start-Sleep -Seconds 3
 
 # Start Frontend
-Write-Host "Starting Frontend on http://localhost:8001..." -ForegroundColor Green
+Write-Host "Starting Frontend on http://127.0.0.1:8001..." -ForegroundColor Green
 Push-Location frontend
 Start-Process python -ArgumentList "-m", "http.server", "8001" -NoNewWindow -PassThru
 Pop-Location
 
 Write-Host ""
-Write-Host "✅ Development servers started!" -ForegroundColor Green
+Write-Host "Development servers started!" -ForegroundColor Green
 Write-Host ""
-Write-Host "Frontend:  http://localhost:8001" -ForegroundColor Cyan
-Write-Host "Backend:   http://localhost:8000" -ForegroundColor Cyan
-Write-Host "API Docs:  http://localhost:8000/api/docs" -ForegroundColor Cyan
+Write-Host "Frontend:  http://127.0.0.1:8001" -ForegroundColor Cyan
+Write-Host "Backend:   http://127.0.0.1:8000" -ForegroundColor Cyan
+Write-Host "API Docs:  http://127.0.0.1:8000/api/docs" -ForegroundColor Cyan
 Write-Host ""
+Write-Host "Opening the live leaderboard in your default browser..." -ForegroundColor Green
+Start-Process "http://127.0.0.1:8001/livelb.html"
 Write-Host "Press Ctrl+C in each terminal to stop" -ForegroundColor Yellow
 Write-Host ""
 

@@ -151,8 +151,8 @@ async def serve_static(file_path: str):
 if __name__ == "__main__":
     import uvicorn
     
-    port = int(settings.__dict__.get("PORT", 8000))
-    host = settings.__dict__.get("HOST", "0.0.0.0")
+    port = getattr(settings, "PORT", 8000)
+    host = getattr(settings, "HOST", "0.0.0.0")
     
     logger.info(f"Starting server on {host}:{port}")
     
